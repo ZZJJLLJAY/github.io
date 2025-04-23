@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>视频通话 - 老年人智能陪伴机器人</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        /* 防止页面左右滑动 */
+        html, body {
+            overflow-x: hidden;
+            position: relative;
+            width: 100%;
+        }
+        
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        @media screen and (min-width: 390px) {
+            .contacts-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .contact-card {
+            background-color: white;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .contact-card:active {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .contact-photo {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+        }
+        
+        .contact-name {
+            padding: var(--spacing-sm);
+            font-size: var(--font-small);
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .call-history {
+            margin-top: var(--spacing-lg);
+        }
+        
+        .call-item {
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            background-color: white;
+            margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-card);
+        }
+        
+        .call-avatar {
+            width: 4rem;
+            height: 4rem;
+            border-radius: var(--radius-full);
+            object-fit: cover;
+            margin-right: var(--spacing-md);
+        }
+        
+        .call-info {
+            flex-grow: 1;
+        }
+        
+        .call-name {
+            font-size: var(--font-normal);
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .call-date {
+            font-size: var(--font-small);
+            color: #777;
+        }
+        
+        .call-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: var(--radius-full);
+            background-color: var(--primary-blue);
+            color: #333;
+            font-size: 1.5rem;
+        }
+        
+        .green-dot {
+            display: inline-block;
+            width: 0.75rem;
+            height: 0.75rem;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .search-bar {
+            display: flex;
+            margin-bottom: var(--spacing-md);
+            width: 95%; /* 缩小搜索框宽度 */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .search-input {
+            flex-grow: 1;
+            height: var(--touch-min);
+            border-radius: var(--radius-md);
+            border: 2px solid #ddd;
+            padding: 0 var(--spacing-md);
+            font-size: var(--font-normal);
+            background-color: #f9f9f9;
+            width: 100%; /* 确保输入框占满容器 */
+        }
+        
+        .search-input:focus {
+            border-color: var(--primary-blue);
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS状态栏 -->
+    <div class="status-bar" role="banner">
+        <div>9:41</div>
+        <div>
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- 主内容区域 -->
+    <div class="main-container">
+        <h1 class="title">视频通话</h1>
+        
+        <!-- 搜索框 -->
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="搜索联系人..." aria-label="搜索联系人" style="font-size: 1.8rem;">
+        </div>
+        
+        <!-- 常用联系人 -->
+        <h2 class="subtitle">家人和朋友</h2>
+        <div class="contacts-grid" style="width: 95%; margin: 0 auto;">
+            <div class="contact-card" role="button" tabindex="0" aria-label="视频通话给儿子">
+                <img src="https://images.unsplash.com/photo-1545167622-3a6ac756afa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="儿子照片" class="contact-photo">
+                <div class="contact-name">儿子</div>
+            </div>
+            
+            <div class="contact-card" role="button" tabindex="0" aria-label="视频通话给女儿">
+                <img src="https://images.unsplash.com/photo-1554727242-741c14fa561c?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="女儿照片" class="contact-photo">
+                <div class="contact-name">女儿</div>
+            </div>
+            
+            <div class="contact-card" role="button" tabindex="0" aria-label="视频通话给孙子">
+                <img src="https://images.unsplash.com/photo-1545696968-1a5245650b36?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="孙子照片" class="contact-photo">
+                <div class="contact-name">孙子</div>
+            </div>
+            
+            <div class="contact-card" role="button" tabindex="0" aria-label="视频通话给孙女">
+                <img src="https://images.unsplash.com/photo-1516589091380-5d8e87df6999?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="孙女照片" class="contact-photo">
+                <div class="contact-name">孙女</div>
+            </div>
+        </div>
+        
+        <!-- 通话历史 -->
+        <h2 class="subtitle">最近通话</h2>
+        <div class="call-history" style="width: 95%; margin: 0 auto;">
+            <div class="call-item">
+                <img src="https://images.unsplash.com/photo-1545167622-3a6ac756afa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="儿子照片" class="call-avatar">
+                <div class="call-info">
+                    <div class="call-name">儿子</div>
+                    <div class="call-date"><span class="green-dot"></span>今天 14:30</div>
+                </div>
+                <button class="call-action" aria-label="回拨儿子">
+                    <i class="fas fa-video"></i>
+                </button>
+            </div>
+            
+            <div class="call-item">
+                <img src="https://images.unsplash.com/photo-1554727242-741c14fa561c?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="女儿照片" class="call-avatar">
+                <div class="call-info">
+                    <div class="call-name">女儿</div>
+                    <div class="call-date">昨天 18:45</div>
+                </div>
+                <button class="call-action" aria-label="回拨女儿">
+                    <i class="fas fa-video"></i>
+                </button>
+            </div>
+            
+            <div class="call-item">
+                <img src="https://images.unsplash.com/photo-1516589091380-5d8e87df6999?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80" alt="孙女照片" class="call-avatar">
+                <div class="call-info">
+                    <div class="call-name">孙女</div>
+                    <div class="call-date">前天 20:15</div>
+                </div>
+                <button class="call-action" aria-label="回拨孙女">
+                    <i class="fas fa-video"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 语音指令按钮 -->
+    <button class="voice-button" aria-label="语音指令" role="button">
+        <i class="fas fa-microphone"></i>
+    </button>
+    
+    <!-- 底部导航 -->
+    <nav class="bottom-nav" role="navigation" aria-label="主导航">
+        <a href="home.html" class="nav-item" aria-label="首页">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-text">首页</span>
+        </a>
+        <a href="video-call.html" class="nav-item active" aria-label="视频通话">
+            <i class="fas fa-video nav-icon"></i>
+            <span class="nav-text">视频</span>
+        </a>
+        <a href="health.html" class="nav-item" aria-label="健康管理">
+            <i class="fas fa-heartbeat nav-icon"></i>
+            <span class="nav-text">健康</span>
+        </a>
+        <a href="photos.html" class="nav-item" aria-label="相册">
+            <i class="fas fa-images nav-icon"></i>
+            <span class="nav-text">相册</span>
+        </a>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 语音按钮点击事件
+            const voiceBtn = document.querySelector('.voice-button');
+            voiceBtn.addEventListener('click', function() {
+                alert('请说出您的指令...');
+            });
+            
+            // 联系人点击动画
+            const contactCards = document.querySelectorAll('.contact-card');
+            contactCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(1.05)';
+                    setTimeout(() => {
+                        alert('正在呼叫...');
+                        this.style.transform = 'scale(1)';
+                    }, 200);
+                });
+            });
+            
+            // 通话按钮点击事件
+            const callButtons = document.querySelectorAll('.call-action');
+            callButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    alert('正在呼叫...');
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

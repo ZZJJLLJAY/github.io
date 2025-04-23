@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>相册 - 老年人智能陪伴机器人</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        .photo-timeline {
+            padding: var(--spacing-md);
+        }
+        
+        .timeline-date {
+            font-size: var(--font-normal);
+            font-weight: bold;
+            margin: var(--spacing-lg) 0 var(--spacing-md);
+            color: var(--primary-orange);
+            padding-left: 2rem;
+            position: relative;
+        }
+        
+        .timeline-date::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 1.5rem;
+            height: 1.5rem;
+            background-color: var(--primary-blue);
+            border-radius: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+            padding-left: 2rem;
+        }
+        
+        .photo-card {
+            background-color: white;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            transition: transform 0.3s ease;
+        }
+        
+        .photo-card:active {
+            transform: scale(1.05);
+        }
+        
+        .photo-img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+        }
+        
+        .photo-caption {
+            padding: var(--spacing-sm);
+            font-size: var(--font-small);
+            text-align: center;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 1rem;
+            width: 0.25rem;
+            background-color: var(--primary-blue);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS状态栏 -->
+    <div class="status-bar" role="banner">
+        <div>9:41</div>
+        <div>
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- 主内容区域 -->
+    <div class="main-container">
+        <h1 class="title">家庭相册</h1>
+        
+        <div class="photo-timeline" style="position: relative;">
+            <div class="timeline-line"></div>
+            
+            <!-- 第一组照片 -->
+            <div class="timeline-date">2023年10月</div>
+            <div class="photos-grid">
+                <div class="photo-card" role="button" tabindex="0">
+                    <img src="https://images.unsplash.com/photo-1609220136736-443140cffec6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="全家福" class="photo-img" loading="lazy">
+                    <div class="photo-caption">全家福</div>
+                </div>
+                <div class="photo-card" role="button" tabindex="0">
+                    <img src="https://images.unsplash.com/photo-1559734840-f9509ee5677f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="孙子生日" class="photo-img" loading="lazy">
+                    <div class="photo-caption">孙子生日</div>
+                </div>
+            </div>
+            
+            <!-- 第二组照片 -->
+            <div class="timeline-date">2023年9月</div>
+            <div class="photos-grid">
+                <div class="photo-card" role="button" tabindex="0">
+                    <img src="https://images.unsplash.com/photo-1605478371310-a9f1e96b4ff4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="公园散步" class="photo-img" loading="lazy">
+                    <div class="photo-caption">公园散步</div>
+                </div>
+                <div class="photo-card" role="button" tabindex="0">
+                    <img src="https://images.unsplash.com/photo-1517157837591-17b69085bfdc?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="和老朋友聚会" class="photo-img" loading="lazy">
+                    <div class="photo-caption">和老朋友聚会</div>
+                </div>
+            </div>
+            
+            <!-- 第三组照片 -->
+            <div class="timeline-date">2023年8月</div>
+            <div class="photos-grid">
+                <div class="photo-card" role="button" tabindex="0">
+                    <img src="https://source.unsplash.com/random/500x500?performance,dance,girl" alt="外孙女表演" class="photo-img" loading="lazy">
+                    <div class="photo-caption">外孙女表演</div>
+                </div>
+                <div class="photo-card" role="button" tabindex="0">
+                    <img src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="下象棋" class="photo-img" loading="lazy">
+                    <div class="photo-caption">下象棋</div>
+                </div>
+                <div class="photo-card" role="button" tabindex="0">
+                    <img src="https://images.unsplash.com/photo-1505483531331-fc3cf89fd382?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="菜园收获" class="photo-img" loading="lazy">
+                    <div class="photo-caption">菜园收获</div>
+                </div>
+                <div class="photo-card" role="button" tabindex="0">
+                    <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="小区晨练" class="photo-img" loading="lazy">
+                    <div class="photo-caption">小区晨练</div>
+                </div>
+            </div>
+            
+            <!-- 查看更多按钮 -->
+            <div style="text-align: center; margin-top: var(--spacing-lg);">
+                <button class="btn btn-primary" aria-label="查看更多照片">
+                    查看更多照片
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 语音指令按钮 -->
+    <button class="voice-button" aria-label="语音指令" role="button">
+        <i class="fas fa-microphone"></i>
+    </button>
+    
+    <!-- 底部导航 -->
+    <nav class="bottom-nav" role="navigation" aria-label="主导航">
+        <a href="home.html" class="nav-item" aria-label="首页">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-text">首页</span>
+        </a>
+        <a href="video-call.html" class="nav-item" aria-label="视频通话">
+            <i class="fas fa-video nav-icon"></i>
+            <span class="nav-text">视频</span>
+        </a>
+        <a href="health.html" class="nav-item" aria-label="健康管理">
+            <i class="fas fa-heartbeat nav-icon"></i>
+            <span class="nav-text">健康</span>
+        </a>
+        <a href="photos.html" class="nav-item active" aria-label="相册">
+            <i class="fas fa-images nav-icon"></i>
+            <span class="nav-text">相册</span>
+        </a>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 语音按钮点击事件
+            const voiceBtn = document.querySelector('.voice-button');
+            voiceBtn.addEventListener('click', function() {
+                alert('请说出您的指令...');
+            });
+            
+            // 照片点击事件
+            const photoCards = document.querySelectorAll('.photo-card');
+            photoCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const img = this.querySelector('img');
+                    alert('正在查看大图：' + img.alt);
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

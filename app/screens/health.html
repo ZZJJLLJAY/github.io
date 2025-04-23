@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>健康管理 - 老年人智能陪伴机器人</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        .health-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .health-card {
+            background-color: white;
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-card);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .health-icon {
+            font-size: 2.5rem;
+            color: var(--primary-orange);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .health-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .health-label {
+            font-size: var(--font-small);
+            color: #666;
+        }
+        
+        .gauge-container {
+            position: relative;
+            width: 100%;
+            margin: var(--spacing-lg) 0;
+        }
+        
+        .gauge-title {
+            font-size: var(--font-normal);
+            font-weight: bold;
+            margin-bottom: var(--spacing-md);
+            text-align: center;
+        }
+        
+        .gauge {
+            width: 100%;
+            height: 250px;
+            position: relative;
+        }
+        
+        .gauge-bg, .gauge-fill {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .gauge-bg {
+            background: #f0f0f0;
+            z-index: 1;
+        }
+        
+        .gauge-fill {
+            background: conic-gradient(var(--primary-blue) 0% var(--percent, 75%), transparent var(--percent, 75%) 100%);
+            z-index: 2;
+        }
+        
+        .gauge-center {
+            width: 150px;
+            height: 150px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .gauge-value {
+            font-size: 3rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+        
+        .gauge-unit {
+            font-size: var(--font-small);
+            color: #666;
+        }
+        
+        .medication-list {
+            margin-top: var(--spacing-lg);
+        }
+        
+        .medication-item {
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-md);
+            background-color: white;
+            border-radius: var(--radius-md);
+            margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-card);
+        }
+        
+        .medication-time {
+            width: 4rem;
+            height: 4rem;
+            border-radius: var(--radius-full);
+            background-color: var(--primary-blue);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-right: var(--spacing-md);
+            flex-shrink: 0;
+        }
+        
+        .medication-time-hour {
+            font-size: 1.5rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+        
+        .medication-time-period {
+            font-size: 0.8rem;
+        }
+        
+        .medication-info {
+            flex-grow: 1;
+        }
+        
+        .medication-name {
+            font-size: var(--font-normal);
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .medication-desc {
+            font-size: var(--font-small);
+            color: #666;
+        }
+        
+        .medication-status {
+            margin-left: var(--spacing-md);
+            font-size: 1.5rem;
+        }
+        
+        .alert-info {
+            background-color: var(--alert-yellow);
+            color: #333;
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+        }
+        
+        .alert-info i {
+            font-size: 1.5rem;
+            margin-right: var(--spacing-md);
+            color: var(--primary-orange);
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS状态栏 -->
+    <div class="status-bar" role="banner">
+        <div>9:41</div>
+        <div>
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- 主内容区域 -->
+    <div class="main-container">
+        <h1 class="title">健康管理</h1>
+        
+        <!-- 健康提醒 -->
+        <div class="alert-info">
+            <i class="fas fa-info-circle"></i>
+            <div>
+                <div style="font-size: var(--font-normal);">您的血压在今天略高</div>
+                <div style="font-size: var(--font-small);">建议多休息，避免劳累</div>
+            </div>
+        </div>
+        
+        <!-- 健康数据概览 -->
+        <div class="health-stats">
+            <div class="health-card">
+                <i class="fas fa-heartbeat health-icon"></i>
+                <div class="health-value">78</div>
+                <div class="health-label">心率 (次/分)</div>
+            </div>
+            
+            <div class="health-card">
+                <i class="fas fa-walking health-icon"></i>
+                <div class="health-value">2,546</div>
+                <div class="health-label">今日步数</div>
+            </div>
+            
+            <div class="health-card">
+                <i class="fas fa-thermometer-half health-icon"></i>
+                <div class="health-value">36.5°</div>
+                <div class="health-label">体温</div>
+            </div>
+            
+            <div class="health-card">
+                <i class="fas fa-bed health-icon"></i>
+                <div class="health-value">7.5</div>
+                <div class="health-label">睡眠时间 (小时)</div>
+            </div>
+        </div>
+        
+        <!-- 血压仪表盘 -->
+        <div class="gauge-container">
+            <div class="gauge-title">血压监测</div>
+            
+            <div class="gauge">
+                <div class="gauge-bg"></div>
+                <div class="gauge-fill" style="--percent: 65%"></div>
+                <div class="gauge-center">
+                    <div class="gauge-value">135/85</div>
+                    <div class="gauge-unit">mmHg</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 用药提醒 -->
+        <h2 class="subtitle">今日用药</h2>
+        <div class="medication-list">
+            <div class="medication-item">
+                <div class="medication-time">
+                    <div class="medication-time-hour">8</div>
+                    <div class="medication-time-period">上午</div>
+                </div>
+                <div class="medication-info">
+                    <div class="medication-name">降压药</div>
+                    <div class="medication-desc">餐后服用 1粒</div>
+                </div>
+                <div class="medication-status">
+                    <i class="fas fa-check-circle" style="color: #4CAF50;"></i>
+                </div>
+            </div>
+            
+            <div class="medication-item">
+                <div class="medication-time">
+                    <div class="medication-time-hour">12</div>
+                    <div class="medication-time-period">中午</div>
+                </div>
+                <div class="medication-info">
+                    <div class="medication-name">降压药</div>
+                    <div class="medication-desc">餐后服用 1粒</div>
+                </div>
+                <div class="medication-status">
+                    <a href="medication.html" style="color: var(--primary-orange);">
+                        <i class="fas fa-bell"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="medication-item">
+                <div class="medication-time">
+                    <div class="medication-time-hour">6</div>
+                    <div class="medication-time-period">下午</div>
+                </div>
+                <div class="medication-info">
+                    <div class="medication-name">降压药</div>
+                    <div class="medication-desc">餐后服用 1粒</div>
+                </div>
+                <div class="medication-status">
+                    <i class="far fa-circle" style="color: #999;"></i>
+                </div>
+            </div>
+            
+            <div class="medication-item">
+                <div class="medication-time">
+                    <div class="medication-time-hour">9</div>
+                    <div class="medication-time-period">晚上</div>
+                </div>
+                <div class="medication-info">
+                    <div class="medication-name">钙片</div>
+                    <div class="medication-desc">睡前服用 1粒</div>
+                </div>
+                <div class="medication-status">
+                    <i class="far fa-circle" style="color: #999;"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 查看更多按钮 -->
+        <div style="margin: var(--spacing-lg) 0; text-align: center;">
+            <a href="#" class="btn btn-primary" aria-label="查看健康历史记录">
+                查看历史记录
+            </a>
+        </div>
+    </div>
+    
+    <!-- 语音指令按钮 -->
+    <button class="voice-button" aria-label="语音指令" role="button">
+        <i class="fas fa-microphone"></i>
+    </button>
+    
+    <!-- 底部导航 -->
+    <nav class="bottom-nav" role="navigation" aria-label="主导航">
+        <a href="home.html" class="nav-item" aria-label="首页">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-text">首页</span>
+        </a>
+        <a href="video-call.html" class="nav-item" aria-label="视频通话">
+            <i class="fas fa-video nav-icon"></i>
+            <span class="nav-text">视频</span>
+        </a>
+        <a href="health.html" class="nav-item active" aria-label="健康管理">
+            <i class="fas fa-heartbeat nav-icon"></i>
+            <span class="nav-text">健康</span>
+        </a>
+        <a href="photos.html" class="nav-item" aria-label="相册">
+            <i class="fas fa-images nav-icon"></i>
+            <span class="nav-text">相册</span>
+        </a>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 语音按钮点击事件
+            const voiceBtn = document.querySelector('.voice-button');
+            voiceBtn.addEventListener('click', function() {
+                alert('请说出您的指令...');
+            });
+        });
+    </script>
+</body>
+</html> 

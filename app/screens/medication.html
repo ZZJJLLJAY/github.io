@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>用药提醒 - 老年人智能陪伴机器人</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        .medication-detail {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-card);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .med-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .med-icon {
+            width: 5rem;
+            height: 5rem;
+            background-color: var(--primary-orange);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: var(--spacing-md);
+            flex-shrink: 0;
+        }
+        
+        .med-icon i {
+            font-size: 2.5rem;
+            color: white;
+        }
+        
+        .med-title {
+            font-size: var(--font-title);
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .med-time {
+            font-size: var(--font-normal);
+            color: #666;
+        }
+        
+        .med-details {
+            background-color: #f9f9f9;
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .med-detail-item {
+            display: flex;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .med-detail-label {
+            font-size: var(--font-normal);
+            font-weight: 500;
+            width: 35%;
+            color: #555;
+        }
+        
+        .med-detail-value {
+            font-size: var(--font-normal);
+            flex-grow: a;
+        }
+        
+        .med-instruction {
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .med-instruction-title {
+            font-size: var(--font-normal);
+            font-weight: bold;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .med-instruction-text {
+            font-size: var(--font-normal);
+            line-height: 1.5;
+            color: #333;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: var(--spacing-lg);
+        }
+        
+        /* 弹窗样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .modal-content {
+            width: 85%;
+            background-color: white;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            text-align: center;
+        }
+        
+        .modal-icon {
+            width: 5rem;
+            height: 5rem;
+            background-color: var(--primary-orange);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-md);
+        }
+        
+        .modal-icon i {
+            font-size: 2.5rem;
+        }
+        
+        .modal-title {
+            font-size: var(--font-title);
+            font-weight: bold;
+            margin-bottom: var(--spacing-md);
+            color: var(--primary-orange);
+        }
+        
+        .modal-text {
+            font-size: var(--font-normal);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS状态栏 -->
+    <div class="status-bar" role="banner">
+        <div>9:41</div>
+        <div>
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- 主内容区域 -->
+    <div class="main-container">
+        <h1 class="title">用药提醒</h1>
+        
+        <div class="medication-detail">
+            <div class="med-header">
+                <div class="med-icon">
+                    <i class="fas fa-pills"></i>
+                </div>
+                <div>
+                    <div class="med-title">降压药</div>
+                    <div class="med-time">今天 12:00 午餐后服用</div>
+                </div>
+            </div>
+            
+            <div class="med-details">
+                <div class="med-detail-item">
+                    <div class="med-detail-label">药品名称:</div>
+                    <div class="med-detail-value">盐酸氨氯地平片</div>
+                </div>
+                <div class="med-detail-item">
+                    <div class="med-detail-label">服用剂量:</div>
+                    <div class="med-detail-value">5mg（1片）</div>
+                </div>
+                <div class="med-detail-item">
+                    <div class="med-detail-label">服用方式:</div>
+                    <div class="med-detail-value">口服</div>
+                </div>
+                <div class="med-detail-item">
+                    <div class="med-detail-label">服用时间:</div>
+                    <div class="med-detail-value">每日一次，午餐后</div>
+                </div>
+            </div>
+            
+            <div class="med-instruction">
+                <div class="med-instruction-title">用药说明：</div>
+                <div class="med-instruction-text">
+                    请在饭后半小时内服用，用温水送服。如出现头晕、面部潮红等情况，请及时联系医生。
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" aria-label="稍后提醒" id="remindLater">
+                    稍后提醒
+                </button>
+                <button class="btn btn-secondary" aria-label="已服用" id="takeMed">
+                    已服用
+                </button>
+            </div>
+        </div>
+        
+        <!-- 紧急求助选项 -->
+        <div style="text-align: center; margin-top: var(--spacing-lg);">
+            <button class="btn btn-alert" style="width: 80%;" aria-label="联系家人帮助" id="callFamily">
+                <i class="fas fa-phone-alt" style="margin-right: 1rem;"></i> 联系家人帮助
+            </button>
+        </div>
+    </div>
+    
+    <!-- 用药提醒弹窗 -->
+    <div class="modal-overlay" id="medicationModal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-pills"></i>
+            </div>
+            <h2 class="modal-title">用药提醒</h2>
+            <p class="modal-text">现在是服用降压药的时间了，请在饭后半小时内服用1片。</p>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" id="modalRemindLater">稍后提醒</button>
+                <button class="btn btn-secondary" id="modalTakeMed">已服用</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 语音指令按钮 -->
+    <button class="voice-button" aria-label="语音指令" role="button">
+        <i class="fas fa-microphone"></i>
+    </button>
+    
+    <!-- 底部导航 -->
+    <nav class="bottom-nav" role="navigation" aria-label="主导航">
+        <a href="home.html" class="nav-item" aria-label="首页">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-text">首页</span>
+        </a>
+        <a href="video-call.html" class="nav-item" aria-label="视频通话">
+            <i class="fas fa-video nav-icon"></i>
+            <span class="nav-text">视频</span>
+        </a>
+        <a href="health.html" class="nav-item active" aria-label="健康管理">
+            <i class="fas fa-heartbeat nav-icon"></i>
+            <span class="nav-text">健康</span>
+        </a>
+        <a href="photos.html" class="nav-item" aria-label="相册">
+            <i class="fas fa-images nav-icon"></i>
+            <span class="nav-text">相册</span>
+        </a>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 弹窗控制
+            const medicationModal = document.getElementById('medicationModal');
+            const modalRemindLater = document.getElementById('modalRemindLater');
+            const modalTakeMed = document.getElementById('modalTakeMed');
+            const remindLater = document.getElementById('remindLater');
+            const takeMed = document.getElementById('takeMed');
+            const callFamily = document.getElementById('callFamily');
+            
+            // 模拟语音播报
+            setTimeout(() => {
+                const utterance = new SpeechSynthesisUtterance("现在是服用降压药的时间了，请在饭后半小时内服用1片。");
+                utterance.lang = 'zh-CN';
+                utterance.volume = 1;
+                speechSynthesis.speak(utterance);
+            }, 1000);
+            
+            // 关闭弹窗并跳转回健康页面
+            modalTakeMed.addEventListener('click', function() {
+                medicationModal.style.display = 'none';
+                alert('太好了！您已经完成了今天的用药计划。');
+                window.location.href = 'health.html';
+            });
+            
+            // 关闭弹窗
+            modalRemindLater.addEventListener('click', function() {
+                medicationModal.style.display = 'none';
+            });
+            
+            // 稍后提醒按钮
+            remindLater.addEventListener('click', function() {
+                alert('好的，我们将在30分钟后再次提醒您。');
+                window.location.href = 'health.html';
+            });
+            
+            // 已服用按钮
+            takeMed.addEventListener('click', function() {
+                alert('太好了！您已经完成了今天的用药计划。');
+                window.location.href = 'health.html';
+            });
+            
+            // 联系家人帮助
+            callFamily.addEventListener('click', function() {
+                alert('正在为您联系家人...');
+            });
+            
+            // 语音按钮点击事件
+            const voiceBtn = document.querySelector('.voice-button');
+            voiceBtn.addEventListener('click', function() {
+                alert('请说出您的指令...');
+            });
+        });
+    </script>
+</body>
+</html> 
